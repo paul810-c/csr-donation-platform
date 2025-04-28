@@ -1,0 +1,82 @@
+version: '3.8'
+
+services:
+  app:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: csr_app
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["sh", "/var/www/html/docker/entrypoint.sh"]
+    command: ["php-fpm"]
+    depends_on:
+      - mysql
+      - rabbitmq
+    networks:
+      - csr
+
+  mysql:
+    image: mysql:8.0
+    container_name: csr_mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: csr
+      MYSQL_USER: csr
+      MYSQL_PASSWORD: csr
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - csr
+
+  nginx:
+    image: nginx:alpine
+    container_name: csr_nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - .:/var/www/html
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - csr
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: csr_rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    networks:
+      - csr
+
+  queue:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    container_name: csr_queue_worker
+    volumes:
+      - .:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["sh", "/var/www/html/docker/entrypoint.sh"]
+    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+    depends_on:
+      - app
+      - rabbitmq
+    networks:
+      - csr
+
+networks:
+  csr:
+    driver: bridge
+
+volumes:
+  mysql_data:

@@ -1,5 +1,6 @@
 <?php
 
+use App\Console\Commands\CheckTableExists;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -29,4 +30,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 'errors' => $e->errors(),
             ], 422);
         });
-    })->create();
+    })->withCommands([
+        CheckTableExists::class,
+    ])
+    ->create();

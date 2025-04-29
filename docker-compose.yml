@@ -9,7 +9,7 @@ services:
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html
-    entrypoint: ["sh", "/var/www/html/docker/entrypoint.sh"]
+#    entrypoint: ["sh", "/var/www/html/docker/entrypoint.sh"]
     command: ["php-fpm"]
     depends_on:
       - mysql
@@ -66,8 +66,18 @@ services:
     volumes:
       - .:/var/www/html
     working_dir: /var/www/html
-    entrypoint: ["sh", "/var/www/html/docker/entrypoint.sh"]
-    command: ["php", "artisan", "queue:work", "--tries=3", "--timeout=90"]
+#    entrypoint: ["sh", "/var/www/html/docker/entrypoint.sh"]
+    command: >
+      sh -c "
+        echo 'Waiting for vendor/autoload.php...';
+        while [ ! -f /var/www/html/vendor/autoload.php ]; do sleep 2; done;
+    
+        echo 'Waiting for database to be seeded...';
+        until php artisan db:table --exists employees; do sleep 2; done;
+    
+        echo 'DB is seeded. Starting queue...';
+        php artisan queue:work
+      "
     depends_on:
       - app
       - rabbitmq

@@ -45,7 +45,7 @@ test('it returns a campaign with total raised amount', function () use (&$campai
 
     $donations->expects('getTotalDonatedToCampaign')
         ->with(1)
-        ->andReturn(500); // 500 cents = 5.00 dollars
+        ->andReturn(500);
 
     $result = $handler->handle(1);
 

@@ -108,5 +108,8 @@ The project is organized into several layers to keep things clean, modular and e
 
 ## Todos / Improvements
 
-- [ ] Consider CQRS (Command Query Responsibility Segregation) for scaling
+- [ ] Setup up supervisord
+- [ ] Refactor docker entrypoint
+- [ ] Create Makefile for tasks
+- [ ] Implement payment
 

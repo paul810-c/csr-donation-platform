@@ -10,7 +10,7 @@ use App\Domain\Common\ValueObject\Money;
 use Mockery\MockInterface;
 use Psr\Log\LoggerInterface;
 
-// Define test variables
+
 /** @var CampaignRepositoryInterface&MockInterface $repository */
 $repository = Mockery::mock(CampaignRepositoryInterface::class);
 /** @var LoggerInterface&MockInterface $logger */
@@ -41,15 +41,15 @@ test('it creates a new campaign successfully', function () use (&$repository, &$
         ->with('Campaign created successfully', Mockery::type('array'));
 
     $campaign = $handler->handle(
-        title: 'Plant Trees',
-        description: 'We plant trees!',
+        title: 'Plant trees',
+        description: 'Plant trees',
         goalAmount: Money::fromString('5000.00'),
         ownerId: 1
     );
 
     expect($campaign->id)->toBe(1)
-        ->and($campaign->title)->toBe('Plant Trees')
-        ->and($campaign->description)->toBe('We plant trees!')
+        ->and($campaign->title)->toBe('Plant trees')
+        ->and($campaign->description)->toBe('Plant trees')
         ->and($campaign->goalAmount->toString())->toBe('5000.00')
         ->and($campaign->status)->toBe(CampaignStatus::OPEN);
 });

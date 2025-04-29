@@ -9,7 +9,6 @@ use App\Domain\Common\ValueObject\Money;
 use App\Domain\Campaign\CampaignStatus;
 use Mockery\MockInterface;
 
-// Mocks
 /** @var CampaignRepositoryInterface&MockInterface $repository */
 $repository = Mockery::mock(CampaignRepositoryInterface::class);
 /** @var ListCampaignsHandler $handler */
@@ -24,7 +23,7 @@ test('it lists all campaigns for an owner', function () use (&$repository, &$han
     $campaign = new Campaign(
         id: 1,
         title: 'Bike More',
-        description: 'Encourage biking!',
+        description: 'Encourage biking',
         goalAmount: Money::fromString('2000.00'),
         ownerId: 42,
         status: CampaignStatus::OPEN,

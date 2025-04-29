@@ -7,7 +7,6 @@ use App\Domain\Employee\Employee;
 use App\Domain\Employee\EmployeeRepositoryInterface;
 use Mockery\MockInterface;
 
-// Define test variables
 /** @var EmployeeRepositoryInterface&MockInterface $repository */
 $repository = Mockery::mock(EmployeeRepositoryInterface::class);
 /** @var IssueAuthTokenHandler $handler */

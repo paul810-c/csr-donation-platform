@@ -2,6 +2,7 @@
 
 A Corporate Social Responsibility (CSR) donation platform built with Laravel 12, designed for internal use within organizations.
 It allows employees to create and manage donation campaigns.
+
 ---
 
 # Project Setup and Usage

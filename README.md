@@ -112,4 +112,4 @@ The project is organized into several layers to keep things clean, modular and e
 - [ ] Refactor docker entrypoint
 - [ ] Create Makefile for tasks
 - [ ] Implement payment
-
+- [ ] Fix the Async email sending
